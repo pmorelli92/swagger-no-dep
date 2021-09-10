@@ -1,0 +1,83 @@
+definitions:
+  main.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  main.petResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Fenrir
+        type: string
+      type:
+        enum:
+        - dog
+        - cat
+        example: dog
+        type: string
+    type: object
+host: localhost
+info:
+  contact: {}
+  description: Handles pet information
+  title: Pet Service
+  version: 1.0.0
+paths:
+  /api/pets/:
+    get:
+      description: Gets a list of pets
+      operationId: get-pets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.petResponse'
+            type: array
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/main.errorResponse'
+      summary: Get pets
+      tags:
+      - Pets
+  /api/pets/{id}:
+    get:
+      description: Gets a pet using the pet ID
+      operationId: get-pet-by-id
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.petResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/main.errorResponse'
+      summary: Get pet by ID
+      tags:
+      - Pets
+schemes:
+- http
+swagger: "2.0"
